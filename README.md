@@ -35,7 +35,7 @@ Njoku Emmanuel
 
 - The contributors can withdraw their Hydro if the required amount(Goal) was not raised within the Deadline💔
 
-# Running Smart Contract with Truffle and ganace blockchain locally
+# Running Smart Contract with Truffle and ganache blockchain locally
 
 ```bash
 # Clone Repo
