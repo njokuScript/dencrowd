@@ -9,9 +9,13 @@
 
 A Decentralized Fundraising platform
 
-| Version                                    | Author                                         |
-| ------------------------------------------ | ---------------------------------------------- |
-| [Web && DAPP](https://github.com/dencrowd) | [Njoku Emmanuel](https://github.com/khay-EMMA) |
+| Version                                      | Author                                          |
+| -------------------------------------------- | ----------------------------------------------- |
+| [Smart Conract](https://github.com/dencrowd) | [Njoku Emmanuel](https://github.com/khay-EMMA)  |
+| ------------------------------------------   | ----------------------------------------------  |
+| [Web](https://github.com/dencrowd)           | [Makwe Quintin](https://github.com/khay-EMMA)   |
+| ------------------------------------------   | ----------------------------------------------  |
+| [UI/UX Design](https://github.com/dencrowd)  | [Jeniffer Apiaka](https://github.com/khay-EMMA) |
 
 # Author 💖
 

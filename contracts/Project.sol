@@ -8,7 +8,7 @@ contract Project {
     // Data structures
     enum State {Fundraising, Expired, Successful}
     //state variables
-    address payable public creator;
+    address public creator;
     uint256 public goal;
     uint256 public deadline;
     uint256 public raisedAmount = 0;
