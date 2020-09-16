@@ -79,6 +79,7 @@ contract Project {
     /** @dev Function to retrieve donated amount when a project expires and when a goal is not met.
      */
     function getRefund() public {
+         require(block.number > deadline);
         require(raisedAmount < goal);
         require(contributions[msg.sender] > 0);
 
@@ -126,4 +127,6 @@ contract Project {
 
         requests.push(newRequest);
     }
+
+
 }
