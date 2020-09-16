@@ -18,4 +18,26 @@ contract Project {
     string public description;
     mapping(address => uint256) public contributions;
     uint256 public totalContributors;
+
+    // Modifier to check current state
+    modifier inState(State _state) {
+        require(state == _state);
+        _;
+    }
+
+    constructor(
+        uint256 _deadline,
+        uint256 _goal,
+        address payable projectStarter,
+        string memory projectTitle,
+        string memory projectDescription,
+        uint256 _minimumContribution
+    ) public {
+        creator = projectStarter;
+        title = projectTitle;
+        description = projectDescription;
+        goal = _goal;
+        minimumContribution = _minimumContribution;
+        deadline = block.number + _deadline;
+    }
 }
