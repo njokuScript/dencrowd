@@ -24,6 +24,11 @@ contract Project {
         require(state == _state);
         _;
     }
+    // Modifier to check if the function caller is the project creator
+    modifier isCreator() {
+        require(msg.sender == creator);
+        _;
+    }
 
     constructor(
         uint256 _deadline,
