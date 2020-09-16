@@ -11,10 +11,19 @@ contract FundRaising {
         address projectStarter,
         string projectTitle,
         string projectDescription,
-        uint256 _deadline,
-        uint256 _goal
+        uint256 durationInDays,
+        uint256 amountToRaise
     );
 
     // List of existing projects
     Project[] private projects;
+
+    //create function to start project
+
+    /** @dev Function to start a new project.
+     * @param title Title of the project to be created
+     * @param description Brief description about the project
+     * @param durationInDays Project deadline in days
+     * @param amountToRaise Project goal in wei
+     */
 }
