@@ -34,3 +34,25 @@ Njoku Emmanuel
 - If more than 50% of the total contributors vote for that request then the User(admin) will get permission to use the amount mentioned in the Spending Request🎉🔥
 
 - The contributors can withdraw their Hydro if the required amount(Goal) was not raised within the Deadline💔
+
+# Running Smart Contract with Truffle and ganace blockchain locally
+
+```bash
+# Clone Repo
+$ git clone `https://github.com/Khay-EMMA/dencrowd.git`
+
+# Install Dependencies
+$ yarn install
+
+```
+
+## Connecting to Ganache and compiling contract
+
+```bash
+# Connect to ganache blockchain
+$ ganache-cli -a
+
+# Run Migration and deploy to local blockchain
+$ truffle migrate
+
+```
