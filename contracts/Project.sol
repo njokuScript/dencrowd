@@ -128,5 +128,25 @@ contract Project {
         requests.push(newRequest);
     }
 
+ /** @dev Function to vote for a spending request
+     */
+    function voteForRequest(uint index) public {
+        Request storage thisRequest = requests[index];
+        require(contributions[msg.sender] > 0);
+        require(thisRequest.voters[msg.sender] == false);
+        
+        thisRequest.voters[msg.sender] = true;
+        thisRequest.numberOfVoters++;
+    }
 
+     /** @dev Function to payout for a spending request
+     */
+      function payOut(uint index) public isCreator {
+        Request storage thisRequest = requests[index];
+        require(thisRequest.completed == false);
+         require(thisRequest.numberOfVoters > totalContributors / 2);//more than 50% voted
+        thisRequest.recipient.transfer(thisRequest.value);
+        emit CreatorPaid(creator);
+        thisRequest.completed = true;
+    }
 }
