@@ -15,7 +15,7 @@ A Decentralized Fundraising platform
 | ------------------------------------------   | ----------------------------------------------  |
 | [Web](https://github.com/dencrowd)           | [Makwe Quintin](https://github.com/khay-EMMA)   |
 | ------------------------------------------   | ----------------------------------------------  |
-| [UI/UX Design](https://github.com/dencrowd)  | [Jeniffer Apiaka](https://github.com/khay-EMMA) |
+| [UI/UX Design](https://github.com/dencrowd)  | [Jennifer Apiaka](https://github.com/khay-EMMA) |
 
 # Author 💖
 

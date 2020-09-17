@@ -24,11 +24,7 @@ contract Project {
         uint256 amount,
         uint256 currentTotal
     );
-      enum State {
-        Fundraising,
-        Expired,
-        Successful
-    }
+    enum State {Fundraising, Expired, Successful}
     // Event that will be emitted whenever the project starter has received the funds
     event CreatorPaid(address recipient);
 
@@ -42,7 +38,7 @@ contract Project {
         _;
     }
 
-        // Modifier to check current state
+    // Modifier to check current state
     modifier inState(State _state) {
         require(state == _state);
         _;
@@ -53,7 +49,6 @@ contract Project {
         address payable recipient;
         bool completed;
         uint256 numberOfVoters;
-        
     }
     mapping(address => bool) voters;
     Request[] public requests;
@@ -65,7 +60,7 @@ contract Project {
         string memory projectTitle,
         string memory projectDescription,
         uint256 _minimumContribution
-    ) {
+    ) public {
         creator = projectStarter;
         title = projectTitle;
         description = projectDescription;
@@ -76,7 +71,7 @@ contract Project {
 
     /** @dev Function to fund a certain project.
      */
-    function contribute() inState(State.Fundraising) external payable {
+    function contribute() external payable inState(State.Fundraising) {
         require(msg.value > minimumContribution);
         require(block.number < deadline);
         if (contributions[msg.sender] == 0) {
@@ -87,17 +82,18 @@ contract Project {
         emit FundingReceived(msg.sender, msg.value, raisedAmount);
         checkIfFundingCompleteOrExpired();
     }
-  /** @dev Function to change the project state depending on conditions.
-      */
+
+    /** @dev Function to change the project state depending on conditions.
+     */
     function checkIfFundingCompleteOrExpired() public {
         if (raisedAmount >= goal) {
             state = State.Successful;
-            
-        } else if (block.number > deadline)  {
+        } else if (block.number > deadline) {
             state = State.Expired;
         }
         completeAt = block.number;
     }
+
     /** @dev Function to get balance .
      */
     function getBalance() public view returns (uint256) {
@@ -107,7 +103,7 @@ contract Project {
     /** @dev Function to retrieve donated amount when a project expires and when a goal is not met.
      */
     function getRefund() public {
-         require(block.number > deadline);
+        require(block.number > deadline);
         require(raisedAmount < goal);
         require(contributions[msg.sender] > 0);
 
@@ -141,7 +137,7 @@ contract Project {
     /** @dev Function to create a spending request by project creator
      */
     function createSpendingRequest(
-        string calldata _description,
+        string memory _description,
         address payable _recipient,
         uint256 _value
     ) public isCreator goalReached {
@@ -156,9 +152,9 @@ contract Project {
         requests.push(newRequest);
     }
 
- /** @dev Function to vote for a spending request
+    /** @dev Function to vote for a spending request
      */
-    function voteForRequest(uint index) public {
+    function voteForRequest(uint256 index) public {
         Request storage thisRequest = requests[index];
         require(contributions[msg.sender] > 0);
         require(voters[msg.sender] == false);
@@ -166,12 +162,12 @@ contract Project {
         thisRequest.numberOfVoters++;
     }
 
-     /** @dev Function to payout for a spending request
+    /** @dev Function to payout for a spending request
      */
-      function payOut(uint index)  public isCreator {
+    function payOut(uint256 index) public isCreator {
         Request storage thisRequest = requests[index];
         require(thisRequest.completed == false);
-         require(thisRequest.numberOfVoters > totalContributors / 2);//more than 50% voted
+        require(thisRequest.numberOfVoters > totalContributors / 2); //more than 50% voted
         thisRequest.recipient.transfer(thisRequest.value);
         emit CreatorPaid(creator);
         thisRequest.completed = true;
