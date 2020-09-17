@@ -14,6 +14,7 @@ contract Project {
     uint256 public minimumContribution;
     string public title;
     string public description;
+    State public state = State.Fundraising; // initialize on create
     mapping(address => uint256) public contributions;
     uint256 public totalContributors;
 
@@ -23,6 +24,11 @@ contract Project {
         uint256 amount,
         uint256 currentTotal
     );
+      enum State {
+        Fundraising,
+        Expired,
+        Successful
+    }
     // Event that will be emitted whenever the project starter has received the funds
     event CreatorPaid(address recipient);
 
@@ -31,14 +37,25 @@ contract Project {
         require(msg.sender == creator);
         _;
     }
+    modifier goalReached() {
+        require(raisedAmount >= goal);
+        _;
+    }
+
+        // Modifier to check current state
+    modifier inState(State _state) {
+        require(state == _state);
+        _;
+    }
     struct Request {
         string description;
         uint256 value;
-        address recipient;
+        address payable recipient;
         bool completed;
         uint256 numberOfVoters;
-        mapping(address => bool) voters;
+        
     }
+    mapping(address => bool) voters;
     Request[] public requests;
 
     constructor(
@@ -59,7 +76,7 @@ contract Project {
 
     /** @dev Function to fund a certain project.
      */
-    function contribute() external payable {
+    function contribute() inState(State.Fundraising) external payable {
         require(msg.value > minimumContribution);
         require(block.number < deadline);
         if (contributions[msg.sender] == 0) {
@@ -68,8 +85,19 @@ contract Project {
         contributions[msg.sender] += msg.value;
         raisedAmount += msg.value;
         emit FundingReceived(msg.sender, msg.value, raisedAmount);
+        checkIfFundingCompleteOrExpired();
     }
-
+  /** @dev Function to change the project state depending on conditions.
+      */
+    function checkIfFundingCompleteOrExpired() public {
+        if (raisedAmount >= goal) {
+            state = State.Successful;
+            
+        } else if (block.number > deadline)  {
+            state = State.Expired;
+        }
+        completeAt = block.number;
+    }
     /** @dev Function to get balance .
      */
     function getBalance() public view returns (uint256) {
@@ -114,9 +142,9 @@ contract Project {
      */
     function createSpendingRequest(
         string calldata _description,
-        address _recipient,
+        address payable _recipient,
         uint256 _value
-    ) public isCreator {
+    ) public isCreator goalReached {
         Request memory newRequest = Request({
             description: _description,
             value: _value,
@@ -133,15 +161,14 @@ contract Project {
     function voteForRequest(uint index) public {
         Request storage thisRequest = requests[index];
         require(contributions[msg.sender] > 0);
-        require(thisRequest.voters[msg.sender] == false);
-        
-        thisRequest.voters[msg.sender] = true;
+        require(voters[msg.sender] == false);
+        voters[msg.sender] = true;
         thisRequest.numberOfVoters++;
     }
 
      /** @dev Function to payout for a spending request
      */
-      function payOut(uint index) public isCreator {
+      function payOut(uint index)  public isCreator {
         Request storage thisRequest = requests[index];
         require(thisRequest.completed == false);
          require(thisRequest.numberOfVoters > totalContributors / 2);//more than 50% voted
